@@ -23,22 +23,29 @@ def fetch_listing_links(url):
         if not href:
             continue
 
-        # STRICT pattern based on real URLs you shared
         if "/hot-wheels/" in href and "/product-detail" in href:
-            if href.startswith("/"):
+
+            # ✅ Correct URL normalization
+            if href.startswith("//"):
+                href = "https:" + href
+            elif href.startswith("/"):
                 href = "https://www.firstcry.com" + href
+            elif not href.startswith("http"):
+                continue
+
             href = href.split("?")[0]
             links.add(href)
 
     return list(links)
 
+
 def fetch_product_name(product_url):
     r = requests.get(product_url, headers=HEADERS, timeout=30)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "html.parser")
 
-    # FirstCry product name is in <h1>
+    soup = BeautifulSoup(r.text, "html.parser")
     h1 = soup.find("h1")
+
     if h1:
         return h1.get_text(strip=True)
 
