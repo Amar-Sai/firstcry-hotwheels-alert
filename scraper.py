@@ -48,9 +48,21 @@ def fetch_product_name(product_url):
     r.raise_for_status()
 
     soup = BeautifulSoup(r.text, "html.parser")
-    h1 = soup.find("h1")
 
-    if h1:
+    # 1️⃣ Try structured product name
+    h1 = soup.find("h1", attrs={"itemprop": "name"})
+    if h1 and h1.get_text(strip=True):
         return h1.get_text(strip=True)
 
-    return "Unknown Hot Wheels Product"
+    # 2️⃣ Try OpenGraph title
+    og = soup.find("meta", property="og:title")
+    if og and og.get("content"):
+        return og["content"].strip()
+
+    # 3️⃣ Fallback to page title
+    title = soup.title.string if soup.title else None
+    if title:
+        return title.replace(" | FirstCry.com", "").strip()
+
+    return "Hot Wheels Product"
+
