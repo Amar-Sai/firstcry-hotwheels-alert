@@ -7,6 +7,7 @@ def main():
     init_db(DB_PATH)
 
     links = fetch_product_links(FIRSTCRY_URL)
+    print("TOTAL LINKS FOUND:", len(links))
     new_links = []
 
     for link in links:
