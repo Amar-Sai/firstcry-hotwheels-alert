@@ -72,5 +72,21 @@ def extract_product_id(product_url):
         return int(parts[-2])
     except Exception:
         return None
+    
+def is_buyable(product_url):
+    r = requests.get(product_url, headers=HEADERS, timeout=30)
+    if r.status_code != 200:
+        return False
+
+    soup = BeautifulSoup(r.text, "html.parser")
+
+    # FirstCry uses Add to Cart / Buy Now buttons
+    buttons = soup.find_all("button")
+    for btn in buttons:
+        text = btn.get_text(strip=True).lower()
+        if "add to cart" in text or "buy now" in text:
+            return True
+
+    return False
 
 
