@@ -25,12 +25,16 @@ def fetch_listing_links(url):
 
         if "/hot-wheels/" in href and "/product-detail" in href:
 
-            # ✅ Correct URL normalization
-            if href.startswith("//"):
+            # ✅ COMPLETE FirstCry URL normalization
+            if href.startswith("http"):
+                pass
+            elif href.startswith("//"):
                 href = "https:" + href
+            elif href.startswith("/www.firstcry.com"):
+                href = "https://" + href.lstrip("/")
             elif href.startswith("/"):
                 href = "https://www.firstcry.com" + href
-            elif not href.startswith("http"):
+            else:
                 continue
 
             href = href.split("?")[0]
