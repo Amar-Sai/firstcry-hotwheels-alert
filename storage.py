@@ -1,0 +1,12 @@
+import json
+import os
+
+def load_seen(path):
+    if not os.path.exists(path):
+        return set()
+    with open(path, "r") as f:
+        return set(json.load(f))
+
+def save_seen(path, items):
+    with open(path, "w") as f:
+        json.dump(sorted(list(items)), f, indent=2)
