@@ -66,3 +66,11 @@ def fetch_product_name(product_url):
 
     return "Hot Wheels Product"
 
+def extract_product_id(product_url):
+    try:
+        parts = product_url.rstrip("/").split("/")
+        return int(parts[-2])
+    except Exception:
+        return None
+
+
